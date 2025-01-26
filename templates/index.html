@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Futbol Takımı Seçici</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+        }
+        .team-box {
+            background-color: #fff;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 1rem;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rastgele Futbol Takımı Seçici</h1>
+        <div id="team1" class="team-box">Takım 1</div>
+        <div id="team2" class="team-box">Takım 2</div>
+        <button onclick="selectTeams()" id="selectButton">🎲 Takımları Seç</button>
+    </div>
+
+    <script>
+        function selectTeams() {
+            const button = document.getElementById('selectButton');
+            const team1Div = document.getElementById('team1');
+            const team2Div = document.getElementById('team2');
+            
+            button.disabled = true;
+            team1Div.textContent = 'Takımlar seçiliyor...';
+            team2Div.textContent = '';
+
+            fetch('/select_teams')
+                .then(response => response.json())
+                .then(data => {
+                    setTimeout(() => {
+                        team1Div.textContent = `🏆 ${data.team1.name} (${data.team1.league})`;
+                        team2Div.textContent = `🏆 ${data.team2.name} (${data.team2.league})`;
+                        button.disabled = false;
+                    }, 500);
+                });
+        }
+    </script>
+</body>
+</html> 
